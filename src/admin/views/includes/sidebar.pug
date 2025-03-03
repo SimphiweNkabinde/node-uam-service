@@ -1,0 +1,10 @@
+.d-flex.flex-column.flex-shrink-0.p-3.text-bg-dark(style='width: 240px')
+    a.mb-3.mb-md-0.me-md-auto.text-white.text-decoration-none
+        span.fs-4 UAM Service
+        p.fw-lighter User Access Management
+        p.small.fw-lighter data storage, authentication, user permissions
+    hr
+    ul.nav.nav-pills.flex-column.mb-auto
+        each name in entityNames 
+            li.nav-item
+                a.nav-link.text-white(href=`/admin/${name}` class={active: name === ActiveEntityName})= name

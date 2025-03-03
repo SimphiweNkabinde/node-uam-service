@@ -10,8 +10,8 @@ import { ApplicationError } from './utils/errors.js';
 const app = new Koa();
 
 // routes
-import indexRoutes from './index/route.js';
-import authRoutes from './api/auth/routes.js';
+import authApiRoutes from './api/auth/routes.js';
+import adminRoutes from './admin/routes.js';
 
 // setup error handling middleware
 app.use(async(ctx, next) => {
@@ -19,8 +19,8 @@ app.use(async(ctx, next) => {
     await next();
 });
 app.use(bodyParser());
-app.use(indexRoutes.routes());
-app.use(authRoutes.routes());
+app.use(adminRoutes.routes());
+app.use(authApiRoutes.routes());
 
 app.listen(process.env.PORT, () => {
     console.log(`Server listening on port: ${process.env.PORT}`);

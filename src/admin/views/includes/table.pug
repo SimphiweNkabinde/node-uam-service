@@ -1,0 +1,11 @@
+.border.rounded-3.py-3.px-4.bg-white
+    table.table.table-hover
+        thead 
+            tr 
+            each value in visibleFields
+                th= value.toUpperCase()
+        tbody
+            - for (var i = 0; i < records.length; i++)
+                tr
+                    - for (var j = 0; j < visibleFields.length; j++)
+                        td= records[i][visibleFields[j]]
