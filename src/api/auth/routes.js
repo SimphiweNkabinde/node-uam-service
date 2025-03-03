@@ -6,9 +6,9 @@ import authController from './controller.js';
 import jwt from 'jsonwebtoken';
 
 
-const baseUrl = '/api/auth';
+const basepath = '/api/auth';
 
-router.post(`${baseUrl}/:provider/register`, async(ctx) => {
+router.post(`${basepath}/:provider/register`, async(ctx) => {
 
     if (ctx.params.provider === 'local') {
 
@@ -46,7 +46,7 @@ router.post(`${baseUrl}/:provider/register`, async(ctx) => {
 
 });
 
-router.post(`${baseUrl}/:provider`, async(ctx) => {
+router.post(`${basepath}/:provider`, async(ctx) => {
     if (ctx.params.provider === 'local') {
         // validation
         let strippedBody;
