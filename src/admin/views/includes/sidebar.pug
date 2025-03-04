@@ -4,7 +4,8 @@
         p.fw-lighter User Access Management
         p.small.fw-lighter data storage, authentication, user permissions
     hr
-    ul.nav.nav-pills.flex-column.mb-auto
-        each name in entityNames 
-            li.nav-item
-                a.nav-link.text-white(href=`/admin/${name}` class={active: name === ActiveEntityName})= name
+    if (entities)
+        ul.nav.nav-pills.flex-column.mb-auto
+            each entity in entities 
+                li.nav-item
+                    a.nav-link.text-white(href=`/admin/${entity.path}` class={active: entity.name === entity})= entity.name

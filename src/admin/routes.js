@@ -1,28 +1,28 @@
 import Router from 'koa-router';
 const router = new Router();
-import pug from 'pug';
-import path from 'path';
 import entityController from './controllers/entity.js';
-import adminConfig from './admin.config.js';
+import locals from '../utils/locals.js';
 
-// views
-const __dirname = path.resolve();
-const indexView = path.join(__dirname, '/src/admin/views/index.pug');
-const notFoundView = path.join(__dirname, '/src/admin/views/not-found.pug');
+const basepath = '/admin';
 
-const basePath = '/admin';
+router.get(basepath, async(ctx) => ctx.render('index'));
 
-router.get(`${basePath}`, async(ctx) => {
+router.get(`${basepath}/auth/login`, async(ctx) => {
     ctx.type = 'html';
-    ctx.body = pug.renderFile(indexView, { entityNames: Object.keys(adminConfig.entities).filter((entity) => adminConfig.entities[entity].visible) });
+    return ctx.render('login');
 });
 
-router.get(`${basePath}/:entity`, async(ctx) => {
+router.post(`${basepath}/auth/login`, async(ctx) => {
+    ctx.type = 'html';
+    return ctx.render('login');
+});
+
+router.get(`${basepath}/:entity`, async(ctx) => {
     const { entity } = ctx.params;
-    if (!adminConfig.entities[entity] ||  !adminConfig.entities[entity].visible) {
-        ctx.status = 404;
+    const targetEntity = locals.entities.find((val) => val.name === entity);
+    if (!targetEntity ||  !targetEntity.active) {
         ctx.type = 'html';
-        return ctx.body = pug.renderFile(notFoundView);
+        return ctx.render('not-found', { message: 'Entity Not Found' });
     }
     const records = await entityController.getAll(entity);
 
@@ -32,12 +32,7 @@ router.get(`${basePath}/:entity`, async(ctx) => {
     });
 
     ctx.type = 'html';
-    ctx.body = pug.renderFile(indexView, {
-        entityNames: Object.keys(adminConfig.entities).filter((entity) => adminConfig.entities[entity].visible),
-        records,
-        visibleFields: adminConfig.entities[entity].indexFields,
-        ActiveEntityName: entity,
-    });
+    return ctx.render('index', { records, params: ctx.params });
 });
 
 export default router;

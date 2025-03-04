@@ -7,7 +7,7 @@ head
 main.d-flex.flex-nowrap.min-vh-100
   include includes/sidebar.pug
   div.p-5.bg-light.w-100
-    h1.mb-3= ActiveEntityName
+    h1.mb-3= params ? params.entity : ''
     p
       if records
         span= records.length + ' entries'

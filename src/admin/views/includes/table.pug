@@ -2,10 +2,10 @@
     table.table.table-hover
         thead 
             tr 
-            each value in visibleFields
+            each value in entities[entities.findIndex(i => i.name == params.entity)].tableFields
                 th= value.toUpperCase()
         tbody
             - for (var i = 0; i < records.length; i++)
                 tr
-                    - for (var j = 0; j < visibleFields.length; j++)
-                        td= records[i][visibleFields[j]]
+                    each field in entities[entities.findIndex(i => i.name == params.entity)].tableFields
+                        td= records[i][field]
