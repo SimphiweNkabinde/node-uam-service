@@ -12,5 +12,7 @@
                     a.nav-link(href=entity.path class=active ? 'active' : 'text-white')= entity.name
     p.text-capitalize.text-white-50= user.username
     form(action='/admin/auth/logout' method='POST')
-        button.btn.btn-danger.btn-sm.w-100 logout
+        button.btn.btn-danger.btn-sm.w-100
+            span.me-2 logout
+            i.bi.bi-box-arrow-right
     
