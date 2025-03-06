@@ -1,3 +1,19 @@
 extends ../layout.pug
 block content
-    include includes/table.pug
+    .mb-5
+        - const entity = entities[entities.findIndex(i => i.name == params.entity)]
+        h1.text-capitalize= params ? params.entity : ''
+        p
+            if records
+            span= records.length + ' entries'
+    .border.rounded.py-3.px-4.bg-white.shadow-sm
+        table.table.table-hover
+            thead 
+                tr
+                    each value in entity.tableFields
+                        th.text-body-secondary.fw-bold(style='font-size: 11px')= value.toUpperCase()
+            tbody
+                - for (var i = 0; i < records.length; i++)
+                    tr(style='cursor:pointer' onclick=`navigateTo('${params.entity}/${records[i].id}')`)
+                        each field in entity.tableFields
+                            td(style='font-size: 14px')= records[i][field]

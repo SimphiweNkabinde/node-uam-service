@@ -98,7 +98,7 @@ router.get('/admin/entity/:entity', middlware.auth, async(ctx) => {
         ctx.type = 'html';
         return ctx.render('entity/not-found', { message: 'Entity Not Found', user: ctx.state.user });
     }
-    const records = await entityController.getAll(entity);
+    const records = await entityController.findAll(entity);
 
     records.forEach((item) =>  {
         item.created_at = item.created_at.toISOString();
@@ -107,6 +107,21 @@ router.get('/admin/entity/:entity', middlware.auth, async(ctx) => {
 
     ctx.type = 'html';
     return ctx.render('entity', { records, params: ctx.params, user: ctx.state.user });
+});
+
+router.get('/admin/entity/:entity/:id', middlware.auth, async(ctx) => {
+    const { entity, id } = ctx.params;
+
+    const targetEntity = locals.entities.find((val) => val.name === entity);
+    if (!targetEntity ||  !targetEntity.active) {
+        ctx.type = 'html';
+        return ctx.render('entity/not-found', { message: 'Entity Not Found', user: ctx.state.user });
+    }
+    const record = await entityController.findOne(entity, { id });
+
+    ctx.type = 'html';
+    return ctx.render('entity/id', { record, params: ctx.params, user: ctx.state.user });
+
 });
 
 export default router;

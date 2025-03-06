@@ -2,9 +2,15 @@ import Knex from 'knex';
 import knexConfig from '../../../knexfile.js';
 const knex = Knex(knexConfig);
 
-async function getAll(entity) {
+async function findAll(entity) {
     return knex(entity)
         .select('*');
 }
 
-export default { getAll  };
+async function findOne(entity, filter) {
+    return knex(entity)
+        .select('*')
+        .where(filter).first();
+}
+
+export default { findAll, findOne  };
