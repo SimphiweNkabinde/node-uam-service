@@ -3,10 +3,10 @@ import knexConfig from '../../../knexfile.js';
 const knex = Knex(knexConfig);
 import bcrypt from 'bcrypt';
 
-async function findOneByEmail(email) {
+async function findOne(filter) {
     return knex('users')
         .select('*')
-        .where({ email }).first();
+        .where(filter).first();
 }
 
 async function register(user) {
@@ -30,4 +30,4 @@ async function validatePassword(password, encryptedPassword) {
     return await bcrypt.compare(password, encryptedPassword);
 }
 
-export default { findOneByEmail, register, validatePassword  };
+export default { findOne, register, validatePassword  };

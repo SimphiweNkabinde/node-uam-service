@@ -26,7 +26,7 @@ router.post(`${basepath}/:provider/register`, async(ctx) => {
 
         // create user
         try {
-            const user = await authController.findOneByEmail(strippedBody.email);
+            const user = await authController.findOne({ email: strippedBody.email });
 
             if (user) {
                 const detail = 'email already in use';
@@ -61,7 +61,7 @@ router.post(`${basepath}/:provider`, async(ctx) => {
         }
 
         try {
-            const user = await authController.findOneByEmail(strippedBody.email);
+            const user = await authController.findOne({ email: strippedBody.email });
             if (!user) return new ValidationError('Invalid email or password');
 
             const { id, username, email, createdAt, updatedAt, password } = user;
