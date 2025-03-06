@@ -1,11 +1,15 @@
 .d-flex.flex-column.flex-shrink-0.p-3.text-bg-dark(style='width: 240px')
-    a.mb-3.mb-md-0.me-md-auto.text-white.text-decoration-none
+    a.mb-3.mb-md-0.me-md-auto.text-white.text-decoration-none(href='/admin')
         span.fs-4 UAM Service
         p.fw-lighter User Access Management
-        p.small.fw-lighter data storage, authentication, user permissions
     hr
-    if (entities)
-        ul.nav.nav-pills.flex-column.mb-auto
+    
+    ul.nav.nav-pills.flex-column.mb-auto
+        if (entities)
             each entity in entities 
                 li.nav-item
-                    a.nav-link.text-white(href=`/admin/${entity.path}` class={active: entity.name === entity})= entity.name
+                - const active = params && (entity.name === params.entity)
+                    a.nav-link(href=entity.path class=active ? 'active' : 'text-white')= entity.name
+    form(action='/admin/auth/logout' method='POST')
+        button.btn.btn-danger.btn-sm.w-100 logout
+    
