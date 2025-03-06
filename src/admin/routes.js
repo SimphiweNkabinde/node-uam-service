@@ -10,6 +10,7 @@ import middlware from './middlware.js';
 router.get('/', async(ctx) => ctx.redirect('/admin'));
 router.get('/admin', middlware.auth, (ctx) => ctx.render('index', { user: ctx.state.user }));
 
+// AUTH ROUTES
 router.get('/admin/auth/login', (ctx) => {
     if (session.get(ctx)) ctx.redirect('/admin');
     ctx.type = 'html';
@@ -58,7 +59,6 @@ router.post('/admin/auth/login', async(ctx) => {
     }
 });
 
-
 router.post('/admin/auth/register', async(ctx) => {
 
     // validation
@@ -90,12 +90,13 @@ router.post('/admin/auth/register', async(ctx) => {
 
 });
 
+// Entity Routes
 router.get('/admin/entity/:entity', middlware.auth, async(ctx) => {
     const { entity } = ctx.params;
     const targetEntity = locals.entities.find((val) => val.name === entity);
     if (!targetEntity ||  !targetEntity.active) {
         ctx.type = 'html';
-        return ctx.render('not-found', { message: 'Entity Not Found' });
+        return ctx.render('entity/not-found', { message: 'Entity Not Found', user: ctx.state.user });
     }
     const records = await entityController.getAll(entity);
 
