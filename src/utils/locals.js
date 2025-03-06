@@ -13,5 +13,19 @@ export default {
                 'updated_at',
             ],
         },
+        {
+            name: 'services',
+            path: '/admin/entity/services',
+            active: true,
+            tableFields: ['id', 'name', 'created_at', 'updated_at'],
+            displayField: 'name',
+            detailFields: [
+                'name',
+                'api_key',
+                'description',
+                'created_at',
+                'updated_at',
+            ],
+        },
     ],
 };
