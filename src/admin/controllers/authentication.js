@@ -3,17 +3,11 @@ import knexConfig from '../../../knexfile.js';
 const knex = Knex(knexConfig);
 import bcrypt from 'bcrypt';
 
-async function findOne(filter) {
-    return knex('users')
-        .select('*')
-        .where(filter).first();
-}
-
 async function register(user) {
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(user.password, salt);
     user.password = hash;
-    const newUser = await knex('users')
+    const newUser = await knex('admin_users')
         .insert(user)
         .returning([
             'id',
@@ -26,8 +20,13 @@ async function register(user) {
     return newUser[0];
 }
 
+async function findOne(filter) {
+    return knex('admin_users')
+        .select('*')
+        .where(filter).first();
+}
 async function validatePassword(password, encryptedPassword) {
     return await bcrypt.compare(password, encryptedPassword);
 }
 
-export default { findOne, register, validatePassword  };
+export default { register, findOne, validatePassword };

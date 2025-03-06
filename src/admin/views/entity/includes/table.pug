@@ -1,11 +1,11 @@
-.border.rounded-3.py-3.px-4.bg-white
+.border.rounded.py-3.px-4.bg-white.shadow-sm
     table.table.table-hover
         thead 
-            tr 
+            tr
             each value in entities[entities.findIndex(i => i.name == params.entity)].tableFields
-                th= value.toUpperCase()
+                th.text-body-secondary.fw-bold(style='font-size: 11px')= value.toUpperCase()
         tbody
             - for (var i = 0; i < records.length; i++)
                 tr
                     each field in entities[entities.findIndex(i => i.name == params.entity)].tableFields
-                        td= records[i][field]
+                        td(style='font-size: 14px')= records[i][field]
