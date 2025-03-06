@@ -1,3 +1,4 @@
+import { object, string } from 'yup';
 export default {
     entities: [
         {
@@ -6,12 +7,18 @@ export default {
             active: true,
             tableFields: ['id', 'username', 'email', 'created_at', 'updated_at'],
             displayField: 'username',
-            detailFields: [
-                'username',
-                'email',
-                'created_at',
-                'updated_at',
-            ],
+            forms: {
+                read: {
+                    allowed: true,
+                    fields: [
+                        'username',
+                        'email',
+                        'created_at',
+                        'updated_at',
+                    ],
+                },
+                create: { allowed: false },
+            },
         },
         {
             name: 'services',
@@ -19,13 +26,29 @@ export default {
             active: true,
             tableFields: ['id', 'name', 'created_at', 'updated_at'],
             displayField: 'name',
-            detailFields: [
-                'name',
-                'api_key',
-                'description',
-                'created_at',
-                'updated_at',
-            ],
+            forms: {
+                read: {
+                    allowed: true,
+                    fields: [
+                        'name',
+                        'api_key',
+                        'description',
+                        'created_at',
+                        'updated_at',
+                    ],
+                },
+                create: {
+                    allowed: true,
+                    fields: [
+                        'name',
+                        'description',
+                    ],
+                    schema: object({
+                        name: string().trim().lowercase().required(),
+                        description: string().trim().required(),
+                    }),
+                },
+            },
         },
     ],
 };
