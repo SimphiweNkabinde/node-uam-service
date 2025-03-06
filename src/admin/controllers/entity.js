@@ -13,4 +13,11 @@ async function findOne(entity, filter) {
         .where(filter).first();
 }
 
-export default { findAll, findOne  };
+async function create(entity, data) {
+    const record = await knex(entity)
+        .insert(data)
+        .returning('*');
+    return record[0];
+}
+
+export default { findAll, findOne, create  };

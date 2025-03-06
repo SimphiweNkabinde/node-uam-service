@@ -93,8 +93,8 @@ router.post('/admin/auth/register', async(ctx) => {
 // Entity Routes
 router.get('/admin/entity/:entity', middlware.auth, async(ctx) => {
     const { entity } = ctx.params;
-    const targetEntity = locals.entities.find((val) => val.name === entity);
-    if (!targetEntity ||  !targetEntity.active) {
+    const entitySettings = locals.entities.find((val) => val.name === entity);
+    if (!entitySettings ||  !entitySettings.active) {
         ctx.type = 'html';
         return ctx.render('entity/not-found', { message: 'Entity Not Found', user: ctx.state.user });
     }
@@ -112,15 +112,53 @@ router.get('/admin/entity/:entity', middlware.auth, async(ctx) => {
 router.get('/admin/entity/:entity/:id', middlware.auth, async(ctx) => {
     const { entity, id } = ctx.params;
 
-    const targetEntity = locals.entities.find((val) => val.name === entity);
-    if (!targetEntity ||  !targetEntity.active) {
+    if (id === 'create' || id === 'edit') {
+        return ctx.render(`entity/${id}`, { params: ctx.params, user: ctx.state.user });
+    }
+
+    const entitySettings = locals.entities.find((val) => val.name === entity);
+    if (!entitySettings ||  !entitySettings.active) {
         ctx.type = 'html';
         return ctx.render('entity/not-found', { message: 'Entity Not Found', user: ctx.state.user });
     }
     const record = await entityController.findOne(entity, { id });
 
+    if (!record) return ctx.render('entity/not-found', { message: 'Entity Record Not Found', user: ctx.state.user });
+
     ctx.type = 'html';
     return ctx.render('entity/id', { record, params: ctx.params, user: ctx.state.user });
+
+});
+
+router.post('/admin/entity/:entity/create', middlware.auth, async(ctx) => {
+    const { entity } = ctx.params;
+
+    const entitySettings = locals.entities.find((val) => val.name === entity);
+    if (!entitySettings ||  !entitySettings.active) {
+        ctx.type = 'html';
+        return ctx.render('entity/not-found', { message: 'Entity Not Found', user: ctx.state.user });
+    }
+
+    // validation
+    let strippedBody;
+    try {
+        await entitySettings.forms.create.schema.validate(ctx.request.body, { stripUnknown: true, abortEarly: false })
+            .then((value) => strippedBody = value);
+    } catch (error) {
+        const errors = {};
+        error.inner.forEach((err) => errors[err.path] = err.message);
+        return ctx.render('entity/create', { errors, values: ctx.request.body, params: ctx.params });
+    }
+
+    if (entity === 'services') {
+        // const token = jwt.sign(strippedBody, 'api-token-secret');
+        // const salt = await bcrypt.genSalt();
+        // const hash = await bcrypt.hash(token, salt);
+        strippedBody.api_key = strippedBody.name.replaceAll(' ', '-');
+    }
+
+    const record = await entityController.create(entity, { ...strippedBody });
+    ctx.redirect(`/admin/entity/${entity}/${record.id}`);
 
 });
 

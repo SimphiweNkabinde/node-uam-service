@@ -1,11 +1,15 @@
 extends ../layout.pug
 block content
     .mb-5
-        - const entity = entities[entities.findIndex(i => i.name == params.entity)]
-        h1.text-capitalize= params ? params.entity : ''
-        p
-            if records
-            span= records.length + ' entries'
+        - const entity = entities.find(i => i.name == params.entity)
+        .d-flex.justify-content-between
+            div
+                h1.text-capitalize= params ? params.entity : ''
+                p
+                    if records
+                    span= records.length + ' records'
+            div 
+                a.btn.btn-primary(href=`${entity.forms.create.allowed && params.entity +  '/create'}` class=`${!entity.forms.create.allowed && 'disabled' }`) + create a new record
     .border.rounded.py-3.px-4.bg-white.shadow-sm
         table.table.table-hover
             thead 

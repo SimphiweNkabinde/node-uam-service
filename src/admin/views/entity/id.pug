@@ -1,14 +1,14 @@
 extends ../layout.pug
 block content
     .mb-5
-        - const entity = entities[entities.findIndex(i => i.name == params.entity)]
+        - const entity = entities.find(i => i.name == params.entity)
         div.d-flex.align-items-center.gap-3
             a.text-decoration-none(href=`/admin/entity/${params.entity}`).fs-4
                 i.bi.bi-arrow-left.fst-normal= "  back"
             h1.text-capitalize.mb-0= record[entity.displayField]
         p= 'Entity: ' + entity.name
     .border.rounded.py-3.px-4.bg-white.shadow-sm.row.m-0
-        each field in entity.detailFields
+        each field in entity.forms.read.fields
             .mb-3.col-6
                 p.form-label.fw-bold= field
                 .form-control= record[field] 
