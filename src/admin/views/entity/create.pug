@@ -10,7 +10,7 @@ block content
             each field in entity.forms.create.fields
                 .mb-3.col-6
                     label.form-label(for=field)= field
-                    input.form-control(id=field name=field) 
+                    input.form-control(id=field name=field value=values[field]) 
                     if (errors)
                         small#email-error.form-text.text-danger.text-opacity-75= errors[field]
             .mb-3.col.d-flex.justify-content-between

@@ -37,18 +37,18 @@ router.post('/admin/auth/login', async(ctx) => {
     } catch (error) {
         const errors = {};
         error.inner.forEach((err) => errors[err.path] = err.message);
-        return ctx.render('auth/login', { errors, values: ctx.request.body });
+        return ctx.render('auth/login', { errors, values: ctx.request.body || {} });
     }
 
     try {
         const user = await authController.findOne({ email: strippedBody.email });
         const errMessage = 'Invalid email or password';
-        if (!user) return ctx.render('auth/login', { errors: { message: errMessage }, values: ctx.request.body });
+        if (!user) return ctx.render('auth/login', { errors: { message: errMessage }, values: ctx.request.body || {} });
 
         const { id, username, email, password } = user;
 
         const validPassword = await authController.validatePassword(strippedBody.password, password);
-        if (!validPassword) return ctx.render('auth/login', { errors: { message: errMessage }, values: ctx.request.body });
+        if (!validPassword) return ctx.render('auth/login', { errors: { message: errMessage }, values: ctx.request.body || {} });
 
         session.create(ctx, { id, username, email });
         return ctx.redirect('/admin');
@@ -69,7 +69,7 @@ router.post('/admin/auth/register', async(ctx) => {
     } catch (error) {
         const errors = {};
         error.inner.forEach((err) => errors[err.path] = err.message);
-        return ctx.render('register', { errors, values: ctx.request.body });
+        return ctx.render('register', { errors, values: ctx.request.body || {} });
     }
 
     // create user
@@ -78,7 +78,7 @@ router.post('/admin/auth/register', async(ctx) => {
 
         if (user) {
             const errors = { email: 'email already in use' };
-            return ctx.render('register', { errors, values: ctx.request.body });
+            return ctx.render('register', { errors, values: ctx.request.body || {} });
         }
         const registerdUser = await authController.register(strippedBody);
         if (registerdUser) ctx.redirect('/admin/auth/login?register=success');
@@ -113,7 +113,7 @@ router.get('/admin/entity/:entity/:id', middlware.auth, async(ctx) => {
     const { entity, id } = ctx.params;
 
     if (id === 'create' || id === 'edit') {
-        return ctx.render(`entity/${id}`, { params: ctx.params, user: ctx.state.user });
+        return ctx.render(`entity/${id}`, { params: ctx.params, user: ctx.state.user, values: {}, errors: {} });
     }
 
     const entitySettings = locals.entities.find((val) => val.name === entity);
@@ -147,7 +147,7 @@ router.post('/admin/entity/:entity/create', middlware.auth, async(ctx) => {
     } catch (error) {
         const errors = {};
         error.inner.forEach((err) => errors[err.path] = err.message);
-        return ctx.render('entity/create', { errors, values: ctx.request.body, params: ctx.params });
+        return ctx.render('entity/create', { errors, values: ctx.request.body || {}, params: ctx.params });
     }
 
     if (entity === 'services') {

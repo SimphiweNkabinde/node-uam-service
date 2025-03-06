@@ -50,5 +50,32 @@ export default {
                 },
             },
         },
+        {
+            name: 'permissions',
+            path: '/admin/entity/permissions',
+            active: true,
+            tableFields: ['id', 'name', 'description'],
+            displayField: 'name',
+            forms: {
+                read: {
+                    allowed: true,
+                    fields: [
+                        'name',
+                        'description',
+                    ],
+                },
+                create: {
+                    allowed: true,
+                    fields: [
+                        'name',
+                        'description',
+                    ],
+                    schema: object({
+                        name: string().trim().lowercase().required(),
+                        description: string().trim().required(),
+                    }),
+                },
+            },
+        },
     ],
 };
