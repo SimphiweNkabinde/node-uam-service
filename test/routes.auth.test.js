@@ -13,7 +13,7 @@ const server = app.listen();
 const requester = await request.execute(server).keepOpen();
 
 
-describe('routes: auth', () => {
+describe('routes: api/auth', () => {
 
     beforeEach(() => knex.migrate.rollback()
         .then(() => knex.migrate.latest())
