@@ -8,8 +8,8 @@
         if (entities)
             each entity in entities 
                 li.nav-item
-                - const active = params && (entity.name === params.entity)
-                    a.nav-link(href=entity.path class=active ? 'active' : 'text-white')= entity.name
+                - const active = params && (entity.name.plural === params.entity)
+                    a.nav-link(href=entity.path class=active ? 'active' : 'text-white')= entity.name.plural
     p.text-capitalize.text-white-50= user.username
     form(action='/admin/auth/logout' method='POST')
         button.btn.btn-danger.btn-sm.w-100

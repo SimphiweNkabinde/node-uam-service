@@ -1,7 +1,7 @@
 extends ../layout.pug
 block content
     .mb-5
-        - const entity = entities.find(i => i.name == params.entity)
+        - const entity = entities.find(i => i.name.plural  == params.entity)
         .d-flex.justify-content-between
             div
                 h1.text-capitalize= params ? params.entity : ''

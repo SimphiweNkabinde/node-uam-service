@@ -1,14 +1,38 @@
 extends ../layout.pug
 block content
     .mb-5
-        - const entity = entities.find(i => i.name == params.entity)
+        - const entity = entities.find(i => i.name.plural  == params.entity)
         div.d-flex.align-items-center.gap-3
             a.text-decoration-none(href=`/admin/entity/${params.entity}`).fs-4
                 i.bi.bi-arrow-left.fst-normal= "  back"
             h1.text-capitalize.mb-0= record[entity.displayField]
-        p= 'Entity: ' + entity.name
-    .border.rounded.py-3.px-4.bg-white.shadow-sm.row.m-0
-        each field in entity.forms.read.fields
-            .mb-3.col-6
-                p.form-label.fw-bold= field
-                .form-control= record[field] 
+        p= 'Entity: ' + entity.name.plural
+    .row
+        .border.rounded.py-3.px-4.bg-white.shadow-sm.row.m-0.col
+            each field in entity.forms.read.fields
+                if (field.includes('.'))
+                    - const [ parent, child ] = field.split('.')
+                    if (Array.isArray(record[parent]))
+                        .mb-3.col-6
+                            p.form-label.fw-bold= parent
+                            each item in record[parent]
+                                .form-control.form-control-sm.mb-1=  item.id + " " + item[child]
+                    else
+                        .mb-3.col-6
+                            p.form-label.fw-bold= parent
+                            .form-control= record[parent][child]
+                else 
+                    .mb-5.col-6
+                        p.form-label.fw-bol= field
+                        .form-control.bg-body-secondary.text-secondary.rounded-0= record[field]
+        .col-2
+            .border.bg-white.p-3.rounded.mb-2
+                p 
+                    span.d-block Created: 
+                    span.text-capitalize= helpers.formattedDate(record.created_at)
+                p 
+                    span.d-block Updated: 
+                    span.text-capitalize= helpers.formattedDate(record.updated_at)
+            a.btn.btn-primary.w-100.mb-2(href=`edit/${record.id}`) update
+            form(action=record.id method='DELETE')
+                button.btn.btn-danger.w-100 delete

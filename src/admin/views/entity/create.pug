@@ -1,10 +1,10 @@
 extends ../layout.pug
 block content
     .mb-5
-        - const entity = entities.find(i => i.name == params.entity)
+        - const entity = entities.find(i => i.name.plural  == params.entity)
         div.d-flex.align-items-center.gap-3
             h1.text-capitalize.mb-0 Create a new record
-        p= 'Entity: ' + entity.name
+        p= 'Entity: ' + entity.name.plural
     if (entity.forms.create.allowed)
         form.border.rounded.py-3.px-4.bg-white.shadow-sm.row.m-0(action='create' method='POST')
             each field in entity.forms.create.fields
