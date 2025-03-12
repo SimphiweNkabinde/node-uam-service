@@ -64,11 +64,4 @@ async function findOne(entity, filter) {
     return { ...service, ...relationProperties };
 }
 
-async function create(entity, data) {
-    const record = await knex(entity)
-        .insert(data)
-        .returning('*');
-    return record[0];
-}
-
-export default { findAll, findOne, create  };
+export default { findAll, findOne  };

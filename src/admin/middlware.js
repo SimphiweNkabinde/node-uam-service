@@ -1,4 +1,4 @@
-import session from '../utils/session.js';
+import session from './lib/session.js';
 
 export default {
     /**

@@ -1,23 +1,22 @@
 extends ../layout.pug
 block content
     .mb-5
-        - const entity = entities.find(i => i.name.plural  == params.entity)
         .d-flex.justify-content-between
             div
-                h1.text-capitalize= params ? params.entity : ''
+                h1.text-capitalize Services
                 p
                     if records
                     span= records.length + ' records'
             div 
-                a.btn.btn-primary.shadow-sm(href=`${entity.forms.create.allowed && params.entity +  '/create'}` class=`${!entity.forms.create.allowed && 'disabled' }`) + create a new record
+                a.btn.btn-primary.shadow-sm(href=`/admin/services/create`) + create a new service
     .border.rounded.py-3.px-4.bg-white.shadow-sm
         table.table.table-hover
             thead 
                 tr
-                    each value in entity.tableFields
+                    each value in ['id', 'name', 'description']
                         th.text-body-secondary.fw-bold(style='font-size: 11px')= value.toUpperCase()
             tbody
                 - for (var i = 0; i < records.length; i++)
-                    tr(style='cursor:pointer' onclick=`navigateTo('${params.entity}/${records[i].id}')`)
-                        each field in entity.tableFields
+                    tr(style='cursor:pointer' onclick=`navigateTo('/admin/services/${records[i].id}')`)
+                        each field in ['id', 'name', 'description']
                             td(style='font-size: 14px')= records[i][field]

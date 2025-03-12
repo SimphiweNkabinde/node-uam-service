@@ -1,0 +1,24 @@
+extends ../layout.pug
+block content
+    .mb-5
+        div.d-flex.align-items-center.gap-3
+            a.text-decoration-none(href='/admin/users/').fs-4
+                i.bi.bi-arrow-left.fst-normal= "  back"
+            h1.text-capitalize.mb-0= record.name
+    .row
+        .border.rounded.py-3.px-4.bg-white.shadow-sm.row.m-0.col
+            each field in ['username', 'email']
+                    .mb-5.col-6
+                        p.form-label.fw-bold= field
+                        .form-control.border-0= record[field]
+        .col-2
+            .border.bg-white.p-3.rounded.mb-2
+                p 
+                    span.d-block Created: 
+                    small.text-capitalize= helpers.formattedDate(record.created_at)
+                p 
+                    span.d-block Updated: 
+                    small.text-capitalize= helpers.formattedDate(record.updated_at)
+            a.btn.btn-primary.w-100.mb-2(href=`edit/${record.id}`) update
+            form(action=record.id method='DELETE')
+                button.btn.btn-danger.w-100 delete

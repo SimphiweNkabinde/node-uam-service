@@ -12,13 +12,13 @@ const app = new Koa();
 
 // routes
 import authApiRoutes from './api/auth/routes.js';
-import adminRoutes from './admin/routes.js';
-import locals from './utils/locals.js';
+import adminRoutes from './admin/routes/index.js';
+import viewLocals from './admin/view.locals.js';
 const __dirname = path.resolve();
 
 new Pug({
     viewPath: path.resolve(__dirname, './src/admin/views'),
-    locals,
+    locals: { ...viewLocals },
     app,
 });
 

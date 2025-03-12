@@ -1,0 +1,22 @@
+extends ../layout.pug
+block content
+    .mb-5
+        .d-flex.justify-content-between
+            div
+                h1.text-capitalize Users
+                p
+                    if records
+                    span= records.length + ' records'
+            div 
+                a.btn.btn-primary.shadow-sm.disabled(href='') + create a new user
+    .border.rounded.py-3.px-4.bg-white.shadow-sm
+        table.table.table-hover
+            thead 
+                tr
+                    each value in ['id', 'username', 'email']
+                        th.text-body-secondary.fw-bold(style='font-size: 11px')= value.toUpperCase()
+            tbody
+                - for (var i = 0; i < records.length; i++)
+                    tr(style='cursor:pointer' onclick=`navigateTo('/admin/users/${records[i].id}')`)
+                        each field in ['id', 'username', 'email']
+                            td(style='font-size: 14px')= records[i][field]

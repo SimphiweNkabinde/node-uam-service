@@ -1,0 +1,22 @@
+extends ../layout.pug
+block content
+    .mb-5
+        .d-flex.justify-content-between
+            div
+                h1.text-capitalize groups
+                p
+                    if records
+                    span= records.length + ' records'
+            div 
+                a.btn.btn-primary.shadow-sm(href='/admin/groups/create') + create a new group
+    .border.rounded.py-3.px-4.bg-white.shadow-sm
+        table.table.table-hover
+            thead 
+                tr
+                    each value in ['id', 'name', 'description']
+                        th.text-body-secondary.fw-bold(style='font-size: 11px')= value.toUpperCase()
+            tbody
+                - for (var i = 0; i < records.length; i++)
+                    tr(style='cursor:pointer' onclick=`navigateTo('/admin/groups/${records[i].id}')`)
+                        each field in ['id', 'name', 'description']
+                            td(style='font-size: 14px')= records[i][field]

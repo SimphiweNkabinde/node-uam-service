@@ -1,15 +1,15 @@
 .d-flex.flex-column.flex-shrink-0.p-3.text-bg-dark(style='width: 240px')
     a.mb-3.mb-md-0.me-md-auto.text-white.text-decoration-none(href='/admin')
-        span.fs-4 UAM Service
+        span.fs-4= sidebar.title
         p.fw-lighter User Access Management
     hr
     
     ul.nav.nav-pills.flex-column.mb-auto
-        if (entities)
-            each entity in entities 
+        if (sidebar)
+            each menuItem in sidebar.menu.items
                 li.nav-item
-                - const active = params && (entity.name.plural === params.entity)
-                    a.nav-link(href=entity.path class=active ? 'active' : 'text-white')= entity.name.plural
+                - const active = params && (menuItem.name.plural === params.entity)
+                    a.nav-link(href=menuItem.path class=active ? 'active' : 'text-white')= menuItem.name
     p.text-capitalize.text-white-50= user.username
     form(action='/admin/auth/logout' method='POST')
         button.btn.btn-danger.btn-sm.w-100
