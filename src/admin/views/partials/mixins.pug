@@ -14,11 +14,14 @@ mixin service-permission-list(permissions)
                             each permission in groupedPermissions[service]
                                 li.text-secondary= permission.name 
 
-mixin text-fields-list(values, fields)
+mixin text-fields-list(values, fields, formAction)
     each field in fields
-        .col-6
-            p.form-label.fw-bold.text-capitalize= field
-            p.mb-0.ps-2= values[field]
+        form.col-6(action=formAction method='PUT')
+            label(for=field).form-label.fw-bold.text-capitalize= field
+            .d-flex.column-gap-1
+                input.form-control.form-control-s.input-touched-focus(value=values[field] name=field id=field onChange='this.classList.add("input-touched")')
+                button.btn.btn-sm.btn-primary(style={'font-size':'0.75rem', padding:'0.25rem 0.5rem'}) save
+
 
 mixin group-list(groups)
     .col-6
@@ -42,8 +45,13 @@ mixin timestamp-card(createdAt, updatedAt)
             small.text-capitalize= helpers.formattedDate(updatedAt)
 
 mixin add-permission(serviceId)
-    form.d-flex.column-gap-1(action='/admin/permissions/create' method='POST')
+    form.d-flex.column-gap-1(action='/admin/permissions' method='POST')
         input.form-control.form-control-sm(placeholder='new permission' name='name' required)
         input.form-control.form-control-sm(placeholder='short description' name='description' required)
         input(type='hidden' name='serviceId' value=serviceId required)
         button.btn.btn-primary +
+
+mixin delete-permission(serviceId, permissionId)
+    form.ms-2(action=`/admin/permissions/${serviceId}/${permissionId}` method='POST')
+        input(type='hidden' name='_method' value='DELETE')
+        button.border-0.bg-transparent.text-danger-emphasis.bi.bi-trash3-fill

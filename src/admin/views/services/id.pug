@@ -7,16 +7,17 @@ block content
             h1.text-capitalize.mb-0= record.name
     .row
         .border.rounded.py-3.px-4.bg-white.shadow-sm.row.m-0.col
-            +text-fields-list(record, ['name', 'description'])
+            +text-fields-list(record, ['name', 'description'], `/admin/services/${record.id}`)
             .col-6
                 p.form-label.fw-bold.text-capitalize Permissions
                 if (!record.permissions.length)
                     p.text-secondary No assigned permissions
                 ul.list-unstyled.ps-2(style={width: '350px'})
                     each permission in record.permissions
-                        li.mb-2
+                        li.mb-2.d-flex.align-items-center
                             span= permission.name
                             small.text-secondary= " : " + permission.description
+                            +delete-permission(record.id, permission.id)
                 .ps-2
                     +add-permission(record.id)
         .col-2

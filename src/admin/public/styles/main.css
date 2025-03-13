@@ -1,0 +1,7 @@
+.input-touched {
+    border-left: 2px solid red;
+}
+
+.input-touched-focus:focus {
+    border-left: 2px solid red;
+}

@@ -7,7 +7,7 @@ const router = new Router();
 
 const basepath = '/admin/permissions';
 
-router.post(`${basepath}/create`, middlware.auth, async(ctx) => {
+router.post(basepath, middlware.auth, async(ctx) => {
 
     let strippedBody;
     try {
@@ -22,6 +22,14 @@ router.post(`${basepath}/create`, middlware.auth, async(ctx) => {
     await controller.create(strippedBody);
 
     return ctx.redirect(`/admin/services/${strippedBody.serviceId}`);
+});
+
+router.delete(`${basepath}/:serviceId/:permissionId`, middlware.auth, async(ctx) => {
+    const { serviceId, permissionId } = ctx.params;
+
+    await controller.remove(permissionId);
+
+    return ctx.redirect(`/admin/services/${serviceId}`);
 });
 
 export default router;

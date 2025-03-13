@@ -16,4 +16,16 @@ async function create(data) {
     return permissionServiceLink[0];
 }
 
-export default { create };
+async function remove(id) {
+    const permissions = await knex('permissions')
+        .select('*')
+        .where({ id });
+
+    if (!permissions.length) return null;
+
+    return knex('permissions')
+        .where('id', id)
+        .del();
+}
+
+export default { create, remove };
