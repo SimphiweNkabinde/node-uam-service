@@ -50,7 +50,8 @@ async function findAll() {
             'services.name as service_name',
         ])
         .leftJoin('permissions_service_links', 'permissions_service_links.permission_id', '=', 'permissions.id')
-        .leftJoin('services', 'services.id', '=', 'permissions_service_links.service_id');
+        .leftJoin('services', 'services.id', '=', 'permissions_service_links.service_id')
+        .orderBy('id');
 }
 
 export default { create, remove, assignToUser, findAll, assignToGroup };

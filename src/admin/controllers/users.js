@@ -4,7 +4,8 @@ const knex = Knex(knexConfig);
 
 async function findAll() {
     return knex('users')
-        .select('*');
+        .select('*')
+        .orderBy('id');
 }
 
 async function findOne(filter) {
