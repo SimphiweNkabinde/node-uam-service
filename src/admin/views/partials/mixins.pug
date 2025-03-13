@@ -1,0 +1,11 @@
+mixin service-permission-list(permissions)
+    p.form-label.fw-bold.text-capitalize Permissions
+    - const groupedPermissions = Object.groupBy(record.permissions, gr => gr.service_name)
+    - const serviceNames = Object.keys(groupedPermissions)
+    ul.list-unstyled.ps-2
+        each service in serviceNames
+            li.mb-3(style={width: '300px'})
+                a.d-block.text-decoration-none(href=`/admin/services/${groupedPermissions[service][0].service_id}`)= service
+                ul
+                    each permission in groupedPermissions[service]
+                        li.text-dark= permission.name 
