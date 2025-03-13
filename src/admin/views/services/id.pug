@@ -8,9 +8,18 @@ block content
     .row
         .border.rounded.py-3.px-4.bg-white.shadow-sm.row.m-0.col
             each field in ['name', 'description']
-                    .mb-5.col-6
-                        p.form-label.fw-bold= field
-                        .form-control.border-0= record[field]
+                .mb-5.col-6
+                    p.form-label.fw-bold.text-capitalize= field
+                    .form-control.border-0= record[field]
+            .col 
+                p.form-label.fw-bold.text-capitalize Permissions
+                    if (!record.permissions.length)
+                        p.text-secondary No assigned permissions
+                    ul.list-unstyled.ps-1(style={width: '350px'})
+                        each permission in record.permissions
+                            li.border.px-2.py-1.mb-1.rounded
+                                span.d-block= permission.name
+                                small.d-block.text-secondary= permission.description
         .col-2
             .border.bg-white.p-3.rounded.mb-2
                 p 

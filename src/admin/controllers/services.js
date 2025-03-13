@@ -8,9 +8,24 @@ async function findAll() {
 }
 
 async function findOne(filter) {
-    return await knex('services')
+    const service = await knex('services')
         .select('*')
         .where(filter).first();
+
+    const permissions = await knex('permissions_service_links')
+        .select([
+            'permissions.id',
+            'permissions.name',
+            'permissions.description',
+            'permissions.created_at as createdAt',
+            'permissions.updated_at as updatedAt',
+        ])
+        .leftJoin('permissions', 'permissions.id', '=', 'permissions_service_links.permission_id')
+        .where({ service_id: filter.id });
+
+    service.permissions = permissions;
+
+    return service;
 }
 
 async function create(data) {
