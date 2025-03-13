@@ -12,6 +12,8 @@ async function findOne(filter) {
         .select('*')
         .where(filter).first();
 
+    if (!group) return null;
+
     const users = await knex('groups_users_links')
         .select([
             'users.id',
@@ -54,4 +56,16 @@ async function update(id, data) {
         .update(data);
 }
 
-export default { findAll, create, findOne, update };
+async function remove(id) {
+    const groups = await knex('groups')
+        .select('*')
+        .where({ id });
+
+    if (!groups.length) return null;
+
+    return knex('groups')
+        .where('id', id)
+        .del();
+}
+
+export default { findAll, create, findOne, update, remove };

@@ -12,6 +12,8 @@ async function findOne(filter) {
         .select('*')
         .where(filter).first();
 
+    if (!service) return null;
+
     const permissions = await knex('permissions_service_links')
         .select([
             'permissions.id',
@@ -42,4 +44,16 @@ async function update(id, data) {
         .update(data);
 }
 
-export default { findAll, create, findOne, update };
+async function remove(id) {
+    const services = await knex('services')
+        .select('*')
+        .where({ id });
+
+    if (!services.length) return null;
+
+    return knex('services')
+        .where('id', id)
+        .del();
+}
+
+export default { findAll, create, findOne, update, remove };

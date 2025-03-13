@@ -6,9 +6,9 @@ block content
                 i.bi.bi-arrow-left.fst-normal= "  back"
             h1.text-capitalize.mb-0= record.name
     .row
-        .border.rounded.py-3.px-4.bg-white.shadow-sm.row.m-0.col
+        .border.rounded.py-3.px-4.bg-white.shadow-sm.row.m-0.col.row-gap-5
             +text-fields-list(record, ['name', 'description'], 'groups')
-            .col 
+            .col
                 p.form-label.fw-bold.text-capitalize Members
                 if (!record.users.length)
                     p.text-secondary No assigned members
@@ -18,11 +18,12 @@ block content
                             li.mb-3
                                 a.text-decoration-none(href=`/admin/users/${user.id}`)= user.username +" | "+user.email
 
-            +service-permission-list(record.permissions)
+            .col-6
+                +service-permission-list(record.permissions)
+                - const permissionIds =  record.permissions.map(t => t.id)
+                +assign-permission-to-group(permissions.filter(p => !permissionIds.includes(p.id)))
 
 
         .col-2
             +timestamp-card(record.created_at, record.updated_at)
-            a.btn.btn-primary.w-100.mb-2(href=`edit/${record.id}`) update
-            form(action=record.id method='DELETE')
-                button.btn.btn-danger.w-100 delete
+            +delete-entity-button('groups',record.id)

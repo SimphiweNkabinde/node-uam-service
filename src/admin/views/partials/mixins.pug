@@ -1,18 +1,17 @@
 mixin service-permission-list(permissions)
-    .col-6
-        p.form-label.fw-bold Permissions
-        if (!permissions.length) 
-            p.text-secondary No assigned permissions 
-        else
-            - const groupedPermissions = Object.groupBy(permissions, gr => gr.service_name)
-            - const serviceNames = Object.keys(groupedPermissions)
-            ul.list-unstyled.ps-2
-                each service in serviceNames
-                    li.mb-3
-                        a.d-block.text-decoration-none(href=`/admin/services/${groupedPermissions[service][0].service_id}`)= service
-                        ul.list-unstyled.ps-2
-                            each permission in groupedPermissions[service]
-                                li.text-secondary= permission.name 
+    p.form-label.fw-bold Permissions
+    if (!permissions.length) 
+        p.text-secondary No assigned permissions 
+    else
+        - const groupedPermissions = Object.groupBy(permissions, gr => gr.service_name)
+        - const serviceNames = Object.keys(groupedPermissions)
+        ul.list-unstyled.ps-2
+            each service in serviceNames
+                li.mb-3
+                    a.d-block.fw-bold.text-decoration-none(href=`/admin/services/${groupedPermissions[service][0].service_id}`)= service
+                    ul.list-unstyled.ps-2
+                        each permission in groupedPermissions[service]
+                            li.text-secondary= "- " + permission.name 
 
 mixin text-fields-list(values, fields, routeName, editable = true)
     each field in fields
@@ -62,7 +61,29 @@ mixin add-permission(serviceId)
         input(type='hidden' name='serviceId' value=serviceId required)
         button.btn.btn-primary +
 
+mixin assign-permission-to-user(permissions)
+    form.d-flex.column-gap-1(action='/admin/permissions-user' method='POST')
+        input(type='hidden' name='userId' value=record.id)
+        select.form-select.form-select-sm(aria-label='select' name='permissionId' required) 
+            option(value='') --assign new permission--
+            each permission in permissions 
+                option(value=permission.id)= permission.service_name + " : " + permission.name
+        button.btn.btn-sm.btn-primary(style={'font-size':'0.75rem', padding:'0.25rem 0.5rem'}) assign
+
+mixin assign-permission-to-group(permissions)
+    form.d-flex.column-gap-1(action='/admin/permissions-group' method='POST')
+        input(type='hidden' name='groupId' value=record.id)
+        select.form-select.form-select-sm(aria-label='select' name='permissionId' required) 
+            option(value='') --assign new permission--
+            each permission in permissions 
+                option(value=permission.id)= permission.service_name + " : " + permission.name
+        button.btn.btn-sm.btn-primary(style={'font-size':'0.75rem', padding:'0.25rem 0.5rem'}) assign
+
 mixin delete-permission(serviceId, permissionId)
     form.ms-2(action=`/admin/permissions/${serviceId}/${permissionId}` method='POST')
         input(type='hidden' name='_method' value='DELETE')
         button.border-0.bg-transparent.text-danger-emphasis.bi.bi-trash3-fill
+
+mixin delete-entity-button(routeName, id)
+    - const pathname = `/admin/${routeName}/${id}`
+    button.btn.btn-danger.w-100(type='button' onClick=`confirmDelete("${pathname}","/admin/${routeName}")`) delete

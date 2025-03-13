@@ -21,11 +21,36 @@ async function remove(id) {
         .select('*')
         .where({ id });
 
-    if (!permissions.length) return null;
+    if (!permissions || !permissions.length) return null;
 
     return knex('permissions')
         .where('id', id)
         .del();
 }
 
-export default { create, remove };
+async function assignToUser(data) {
+    return await knex('permissions_users_links')
+        .insert({ permission_id: data.permissionId, user_id: data.userId })
+        .returning('*');
+}
+
+async function assignToGroup(data) {
+    return await knex('groups_permissions_links')
+        .insert({ permission_id: data.permissionId, group_id: data.groupId })
+        .returning('*');
+}
+
+async function findAll() {
+    return knex('permissions')
+        .select([
+            'permissions.name',
+            'permissions.id',
+            'permissions.description',
+            'services.id as service_id',
+            'services.name as service_name',
+        ])
+        .leftJoin('permissions_service_links', 'permissions_service_links.permission_id', '=', 'permissions.id')
+        .leftJoin('services', 'services.id', '=', 'permissions_service_links.service_id');
+}
+
+export default { create, remove, assignToUser, findAll, assignToGroup };

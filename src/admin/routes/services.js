@@ -24,6 +24,9 @@ router.get(`${basepath}/create`, middlware.auth, async(ctx) => {
 router.get(`${basepath}/:id`, middlware.auth, async(ctx) => {
     const { id } = ctx.params;
     const record = await controller.findOne({ id });
+
+    if (!record) return ctx.render('not-found');
+
     ctx.type = 'html';
     return ctx.render('services/id', { record, user: ctx.state.user });
 });
@@ -60,6 +63,12 @@ router.put(`${basepath}/:id`, middlware.auth, async(ctx) => {
     await controller.update(id, strippedBody);
 
     return ctx.redirect(`/admin/services/${id}`);
+});
+
+router.delete(`${basepath}/:id`, middlware.auth, async(ctx) => {
+    const { id } = ctx.params;
+    await controller.remove(id);
+    return ctx.redirect('/admin/services');
 });
 
 export default router;

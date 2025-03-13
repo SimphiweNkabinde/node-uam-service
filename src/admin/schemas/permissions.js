@@ -6,4 +6,14 @@ const create = object({
     serviceId: number().min(1).required(),
 });
 
-export default { create };
+const assignUser = object({
+    userId: number().min(1).required(),
+    permissionId: number().min(1).required(),
+});
+
+const assignGroup = object({
+    groupId: number().min(1).required(),
+    permissionId: number().min(1).required(),
+});
+
+export default { create, assignUser, assignGroup };

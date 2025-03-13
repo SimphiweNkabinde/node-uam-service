@@ -12,6 +12,8 @@ async function findOne(filter) {
         .select('*')
         .where(filter).first();
 
+    if (!user) return null;
+
     const groups = await knex('groups_users_links')
         .select('*')
         .leftJoin('groups', 'groups.id', '=', 'groups_users_links.group_id')
@@ -36,4 +38,16 @@ async function findOne(filter) {
     return user;
 }
 
-export default { findAll, findOne };
+async function remove(id) {
+    const users = await knex('users')
+        .select('*')
+        .where({ id });
+
+    if (!users.length) return null;
+
+    return knex('users')
+        .where('id', id)
+        .del();
+}
+
+export default { findAll, findOne, remove };

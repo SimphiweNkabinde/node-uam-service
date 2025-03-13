@@ -2,6 +2,7 @@ import Router from 'koa-router';
 import middlware from '../middlware.js';
 import controller from '../controllers/groups.js';
 import schema from '../schemas/groups.js';
+import permissionsController from '../controllers/permissions.js';
 
 const router = new Router();
 
@@ -22,8 +23,12 @@ router.get(`${basepath}/create`, middlware.auth, async(ctx) => {
 router.get(`${basepath}/:id`, middlware.auth, async(ctx) => {
     const { id } = ctx.params;
     const record = await controller.findOne({ id });
+
+    if (!record) return ctx.render('not-found');
+
+    const permissions = await permissionsController.findAll();
     ctx.type = 'html';
-    return ctx.render('groups/id', { record, user: ctx.state.user });
+    return ctx.render('groups/id', { record, permissions, user: ctx.state.user });
 });
 
 router.post(basepath, middlware.auth, async(ctx) => {
@@ -58,6 +63,12 @@ router.put(`${basepath}/:id`, middlware.auth, async(ctx) => {
     await controller.update(id, strippedBody);
 
     return ctx.redirect(`/admin/groups/${id}`);
+});
+
+router.delete(`${basepath}/:id`, middlware.auth, async(ctx) => {
+    const { id } = ctx.params;
+    await controller.remove(id);
+    return ctx.redirect('/admin/groups');
 });
 
 export default router;
