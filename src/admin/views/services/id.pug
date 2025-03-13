@@ -8,7 +8,7 @@ block content
     .row
         .border.rounded.py-3.px-4.bg-white.shadow-sm.row.m-0.col
             +text-fields-list(record, ['name', 'description'])
-            .col 
+            .col-6
                 p.form-label.fw-bold.text-capitalize Permissions
                 if (!record.permissions.length)
                     p.text-secondary No assigned permissions
@@ -17,6 +17,8 @@ block content
                         li.mb-2
                             span= permission.name
                             small.text-secondary= " : " + permission.description
+                .ps-2
+                    +add-permission(record.id)
         .col-2
             +timestamp-card(record.created_at, record.updated_at)
             a.btn.btn-primary.w-100.mb-2(href=`edit/${record.id}`) update

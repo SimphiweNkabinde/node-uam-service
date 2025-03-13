@@ -10,12 +10,6 @@ block content
                     input.form-control(id=field name=field value=values[field]) 
                     if (errors)
                         small#email-error.form-text.text-danger.text-opacity-75= errors[field]
-            p.fw-bold.mb-1 Permissions
-            div.ps-3.mb-5
-                .mb-1.d-flex.gap-2
-                    input.form-control(placeholder='name' name='permission-name-1' style={width:'300px'})
-                    input.form-control(placeholder='description' name='permission-description-1' style={width:'400px'})
-                    button.btn.btn-primary(type='button') +
             .mb-3.col.d-flex.justify-content-between
                 a.btn.btn-outline-secondary(href='/admin/services') cancel
                 button.btn.btn-primary(type='submit') create

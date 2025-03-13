@@ -40,3 +40,10 @@ mixin timestamp-card(createdAt, updatedAt)
         p 
             span.d-block Updated: 
             small.text-capitalize= helpers.formattedDate(updatedAt)
+
+mixin add-permission(serviceId)
+    form.d-flex.column-gap-1(action='/admin/permissions/create' method='POST')
+        input.form-control.form-control-sm(placeholder='new permission' name='name' required)
+        input.form-control.form-control-sm(placeholder='short description' name='description' required)
+        input(type='hidden' name='serviceId' value=serviceId required)
+        button.btn.btn-primary +
