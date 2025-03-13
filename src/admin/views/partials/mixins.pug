@@ -1,11 +1,42 @@
 mixin service-permission-list(permissions)
-    p.form-label.fw-bold.text-capitalize Permissions
-    - const groupedPermissions = Object.groupBy(record.permissions, gr => gr.service_name)
-    - const serviceNames = Object.keys(groupedPermissions)
-    ul.list-unstyled.ps-2
-        each service in serviceNames
-            li.mb-3(style={width: '300px'})
-                a.d-block.text-decoration-none(href=`/admin/services/${groupedPermissions[service][0].service_id}`)= service
-                ul
-                    each permission in groupedPermissions[service]
-                        li.text-dark= permission.name 
+    .col-6
+        p.form-label.fw-bold Permissions
+        if (!permissions.length) 
+            p.text-secondary No assigned permissions 
+        else
+            - const groupedPermissions = Object.groupBy(permissions, gr => gr.service_name)
+            - const serviceNames = Object.keys(groupedPermissions)
+            ul.list-unstyled.ps-2
+                each service in serviceNames
+                    li.mb-3
+                        a.d-block.text-decoration-none(href=`/admin/services/${groupedPermissions[service][0].service_id}`)= service
+                        ul.list-unstyled.ps-2
+                            each permission in groupedPermissions[service]
+                                li.text-secondary= permission.name 
+
+mixin text-fields-list(values, fields)
+    each field in fields
+        .col-6
+            p.form-label.fw-bold.text-capitalize= field
+            p.mb-0.ps-2= values[field]
+
+mixin group-list(groups)
+    .col-6
+        p.form-label.fw-bold Groups
+        if (!groups.length)
+            p.text-secondary No assigned groups
+        ul.list-unstyled.ps-2
+            each group in groups
+                li.mb-3
+                    a.d-block.text-decoration-none(href=`/admin/groups/${group.id}`)
+                        span= group.name
+                        small.text-secondary= " : " + group.description
+
+mixin timestamp-card(createdAt, updatedAt)
+    .border.bg-white.p-3.rounded.mb-2
+        p 
+            span.d-block Created: 
+            small.text-capitalize= helpers.formattedDate(createdAt)
+        p 
+            span.d-block Updated: 
+            small.text-capitalize= helpers.formattedDate(updatedAt)
