@@ -68,4 +68,16 @@ async function remove(id) {
         .del();
 }
 
-export default { findAll, create, findOne, update, remove };
+async function assignToUser(data) {
+    return await knex('groups_users_links')
+        .insert({ group_id: data.groupId, user_id: data.userId })
+        .returning('*');
+}
+
+async function removeUserLink(id) {
+    return await knex('groups_users_links')
+        .where('id', id)
+        .del();
+}
+
+export default { findAll, create, findOne, update, remove, assignToUser, removeUserLink };

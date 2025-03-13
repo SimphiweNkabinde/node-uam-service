@@ -2,6 +2,8 @@ import Router from 'koa-router';
 import middlware from '../middlware.js';
 import controller from '../controllers/users.js';
 import permissionsController from '../controllers/permissions.js';
+import groupsController from '../controllers/groups.js';
+
 const router = new Router();
 
 const basepath = '/admin/users';
@@ -20,8 +22,11 @@ router.get(`${basepath}/:id`, middlware.auth, async(ctx) => {
     if (!record) return ctx.render('not-found');
 
     const permissions = await permissionsController.findAll();
+
+    const groups = await groupsController.findAll();
+
     ctx.type = 'html';
-    return ctx.render('users/id', { record, permissions, user: ctx.state.user });
+    return ctx.render('users/id', { record, permissions, groups, user: ctx.state.user });
 });
 
 export default router;

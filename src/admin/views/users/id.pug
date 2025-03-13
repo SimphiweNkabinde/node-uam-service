@@ -10,9 +10,12 @@ block content
             +text-fields-list(record, ['username', 'email'], 'users', false)
             .col-6
                 +service-permission-list(record.permissions)
-                - const permissionIds =  record.permissions.map(t => t.id)
+                - const permissionIds =  record.permissions.map(p => p.id)
                 +assign-permission-to-user(permissions.filter(p => !permissionIds.includes(p.id)))
-            +group-list(record.groups)
+            .col-6
+                +group-list(record.groups)
+                - const groupIds =  record.groups.map(g => g.id)
+                +assign-user-to-group(groups.filter(g => !groupIds.includes(g.id)))
 
         .col-2
             +timestamp-card(record.created_at, record.updated_at)

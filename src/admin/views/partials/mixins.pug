@@ -34,16 +34,20 @@ mixin create-form(fields, routeName)
 
 
 mixin group-list(groups)
-    .col-6
+    .div
         p.form-label.fw-bold Groups
         if (!groups.length)
             p.text-secondary No assigned groups
         ul.list-unstyled.ps-2
             each group in groups
-                li.mb-3
-                    a.d-block.text-decoration-none(href=`/admin/groups/${group.id}`)
+                li.mb-1
+                    a.d-flex.align-items-center.text-decoration-none(href=`/admin/groups/${group.id}`)
                         span= group.name
                         small.text-secondary= " : " + group.description
+                        form.ms-2(action=`/admin/groups-users/${group.group_user_id}/` method='POST')
+                            input(type='hidden' name='_method' value='DELETE')
+                            button.border-0.bg-transparent.text-danger-emphasis.bi.bi-trash3-fill
+
 
 mixin timestamp-card(createdAt, updatedAt)
     .border.bg-white.p-3.rounded.mb-2
@@ -87,3 +91,12 @@ mixin delete-permission(serviceId, permissionId)
 mixin delete-entity-button(routeName, id)
     - const pathname = `/admin/${routeName}/${id}`
     button.btn.btn-danger.w-100(type='button' onClick=`confirmDelete("${pathname}","/admin/${routeName}")`) delete
+
+mixin assign-user-to-group(groups)
+    form.d-flex.column-gap-1(action='/admin/groups-users' method='POST')
+        input(type='hidden' name='userId' value=record.id)
+        select.form-select.form-select-sm(aria-label='select' name='groupId' required) 
+            option(value='') --add to group--
+            each group in groups 
+                option(value=group.id)= group.name
+        button.btn.btn-sm.btn-primary(style={'font-size':'0.75rem', padding:'0.25rem 0.5rem'}) assign

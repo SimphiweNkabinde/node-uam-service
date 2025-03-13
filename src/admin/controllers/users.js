@@ -15,7 +15,14 @@ async function findOne(filter) {
     if (!user) return null;
 
     const groups = await knex('groups_users_links')
-        .select('*')
+        .select([
+            'groups_users_links.id as group_user_id',
+            'groups.id',
+            'groups.name',
+            'groups.description',
+            'groups.created_at',
+            'groups.updated_at',
+        ])
         .leftJoin('groups', 'groups.id', '=', 'groups_users_links.group_id')
         .where({ user_id: filter.id });
 

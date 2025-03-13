@@ -1,4 +1,4 @@
-import { object, string } from 'yup';
+import { number, object, string } from 'yup';
 
 const create = object({
     name: string().trim().lowercase().required(),
@@ -10,4 +10,9 @@ const update = object({
     description: string().trim(),
 });
 
-export default { create, update };
+const assignUser = object({
+    userId: number().min(1).required(),
+    groupId: number().min(1).required(),
+});
+
+export default { create, update, assignUser };

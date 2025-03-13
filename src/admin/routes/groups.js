@@ -71,4 +71,28 @@ router.delete(`${basepath}/:id`, middlware.auth, async(ctx) => {
     return ctx.redirect('/admin/groups');
 });
 
+router.post(`${basepath}-users`, middlware.auth, async(ctx) => {
+
+    let strippedBody;
+    try {
+        await schema.assignUser.validate(ctx.request.body, { stripUnknown: true, abortEarly: false })
+            .then((value) => strippedBody = value);
+    } catch (error) {
+        const errors = {};
+        error.inner.forEach((err) => errors[err.path] = err.message);
+        return ctx.render('groups/id', { errors, values: ctx.request.body || {}, params: ctx.params });
+    }
+
+    await controller.assignToUser(strippedBody);
+
+    return ctx.redirect(`/admin/users/${strippedBody.userId}`);
+});
+
+router.delete(`${basepath}-users/:linkId`, middlware.auth, async(ctx) => {
+    const { linkId } = ctx.params;
+
+    await controller.removeUserLink(linkId);
+    return ctx.redirect(ctx.request.header.referer);
+});
+
 export default router;
