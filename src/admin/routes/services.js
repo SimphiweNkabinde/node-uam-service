@@ -28,7 +28,7 @@ router.get(`${basepath}/:id`, middlware.auth, async(ctx) => {
     return ctx.render('services/id', { record, user: ctx.state.user });
 });
 
-router.post(`${basepath}/create`, middlware.auth, async(ctx) => {
+router.post(basepath, middlware.auth, async(ctx) => {
 
     let strippedBody;
     try {
@@ -42,6 +42,24 @@ router.post(`${basepath}/create`, middlware.auth, async(ctx) => {
 
     const record = await controller.create(strippedBody);
     return ctx.redirect(`/admin/services/${record.id}`);
+});
+
+router.put(`${basepath}/:id`, middlware.auth, async(ctx) => {
+    const { id } = ctx.params;
+
+    let strippedBody;
+    try {
+        await schema.update.validate(ctx.request.body, { stripUnknown: true, abortEarly: false })
+            .then((value) => strippedBody = value);
+    } catch (error) {
+        const errors = {};
+        error.inner.forEach((err) => errors[err.path] = err.message);
+        return ctx.render('services/create', { errors, values: ctx.request.body || {}, params: ctx.params });
+    }
+
+    await controller.update(id, strippedBody);
+
+    return ctx.redirect(`/admin/services/${id}`);
 });
 
 export default router;

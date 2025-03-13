@@ -7,7 +7,7 @@ block content
             h1.text-capitalize.mb-0= record.name
     .row
         .border.rounded.py-3.px-4.bg-white.shadow-sm.row.m-0.col
-            +text-fields-list(record, ['name', 'description'], `/admin/services/${record.id}`)
+            +text-fields-list(record, ['name', 'description'], 'services')
             .col-6
                 p.form-label.fw-bold.text-capitalize Permissions
                 if (!record.permissions.length)

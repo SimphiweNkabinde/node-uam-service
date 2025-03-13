@@ -14,10 +14,11 @@ mixin service-permission-list(permissions)
                             each permission in groupedPermissions[service]
                                 li.text-secondary= permission.name 
 
-mixin text-fields-list(values, fields, formAction)
+mixin text-fields-list(values, fields, routeName)
     each field in fields
-        form.col-6(action=formAction method='PUT')
+        form.col-6(action=`/admin/${routeName}/${values.id}` method='POST')
             label(for=field).form-label.fw-bold.text-capitalize= field
+            input(type="hidden" name="_method" value="PUT")
             .d-flex.column-gap-1
                 input.form-control.form-control-s.input-touched-focus(value=values[field] name=field id=field onChange='this.classList.add("input-touched")')
                 button.btn.btn-sm.btn-primary(style={'font-size':'0.75rem', padding:'0.25rem 0.5rem'}) save

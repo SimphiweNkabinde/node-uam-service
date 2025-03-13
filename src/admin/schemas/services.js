@@ -5,4 +5,9 @@ const create = object({
     description: string().trim().required(),
 });
 
-export default { create };
+const update = object({
+    name: string().trim().lowercase(),
+    description: string().trim(),
+});
+
+export default { create, update };

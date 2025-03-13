@@ -36,4 +36,10 @@ async function create(data) {
     return record[0];
 }
 
-export default { findAll, create, findOne };
+async function update(id, data) {
+    return await knex('services')
+        .where('id', id)
+        .update(data);
+}
+
+export default { findAll, create, findOne, update };
