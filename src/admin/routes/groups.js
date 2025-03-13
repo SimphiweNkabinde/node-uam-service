@@ -15,8 +15,6 @@ router.get(basepath, middlware.auth, async(ctx) => {
 });
 
 router.get(`${basepath}/create`, middlware.auth, async(ctx) => {
-    console.log(ctx.state);
-
     ctx.type = 'html';
     return ctx.render('groups/create', { user: ctx.state.user, values: {} });
 });

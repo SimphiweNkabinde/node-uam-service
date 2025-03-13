@@ -51,7 +51,6 @@ router.post(`${basepath}/login`, async(ctx) => {
 
     } catch (error) {
         console.log(error);
-        return new ApplicationError();
     }
 });
 
@@ -81,7 +80,6 @@ router.post(`${basepath}/register`, async(ctx) => {
 
     } catch (error) {
         console.log(error);
-        return new ApplicationError();
     }
 
 });
