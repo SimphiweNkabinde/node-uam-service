@@ -7,7 +7,7 @@ block content
             h1.text-capitalize.mb-0= record.username
     .row
         .border.rounded.py-3.px-4.bg-white.shadow-sm.row.m-0.col.row-gap-3
-            +text-fields-list(record, ['username', 'email'], 'users')
+            +text-fields-list(record, ['username', 'email'], 'users', false)
             +service-permission-list(record.permissions)
             +group-list(record.groups)
 
