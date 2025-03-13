@@ -28,7 +28,7 @@ router.get(`${basepath}/:id`, middlware.auth, async(ctx) => {
     return ctx.render('groups/id', { record, user: ctx.state.user });
 });
 
-router.post(`${basepath}/create`, middlware.auth, async(ctx) => {
+router.post(basepath, middlware.auth, async(ctx) => {
 
     let strippedBody;
     try {

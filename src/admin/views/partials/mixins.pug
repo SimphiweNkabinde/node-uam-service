@@ -23,6 +23,16 @@ mixin text-fields-list(values, fields, routeName, editable = true)
                 input.form-control.form-control-s.input-touched-focus(value=values[field] name=field id=field onChange='this.classList.add("input-touched")' disabled=!editable)
                 button.btn.btn-sm.btn-primary(style={'font-size':'0.75rem', padding:'0.25rem 0.5rem'} disabled=!editable) save
 
+mixin create-form(fields, routeName)
+    form.border.rounded.py-3.px-4.bg-white.shadow-sm.m-0.row(action=`/admin/${routeName}` method='POST')
+        each field in fields
+            .col-6
+                label(for=field).form-label.fw-bold.text-capitalize= field
+                input.form-control.form-control-s(name=field id=field required)
+        .mb-3.col.d-flex.justify-content-between.mt-3
+            a.btn.btn-outline-secondary(href='/admin/groups') cancel
+            button.btn.btn-primary(type='submit') create
+
 
 mixin group-list(groups)
     .col-6
