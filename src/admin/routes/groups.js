@@ -25,7 +25,7 @@ router.get(`${basepath}/:id`, middlware.auth, async(ctx) => {
     const { id } = ctx.params;
     const record = await controller.findOne({ id });
     ctx.type = 'html';
-    return ctx.render('services/id', { record, user: ctx.state.user });
+    return ctx.render('groups/id', { record, user: ctx.state.user });
 });
 
 router.post(`${basepath}/create`, middlware.auth, async(ctx) => {

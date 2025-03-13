@@ -17,8 +17,8 @@ async function findOne(filter) {
             'permissions.id',
             'permissions.name',
             'permissions.description',
-            'permissions.created_at as createdAt',
-            'permissions.updated_at as updatedAt',
+            'permissions.created_at',
+            'permissions.updated_at',
         ])
         .leftJoin('permissions', 'permissions.id', '=', 'permissions_service_links.permission_id')
         .where({ service_id: filter.id });
