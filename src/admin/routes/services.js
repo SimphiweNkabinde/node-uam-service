@@ -54,7 +54,7 @@ router.put(`${basepath}/:id`, middlware.auth, async(ctx) => {
     } catch (error) {
         const errors = {};
         error.inner.forEach((err) => errors[err.path] = err.message);
-        return ctx.render('services/create', { errors, values: ctx.request.body || {}, params: ctx.params });
+        return ctx.render('services', { errors, values: ctx.request.body || {}, params: ctx.params });
     }
 
     await controller.update(id, strippedBody);

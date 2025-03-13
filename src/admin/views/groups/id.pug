@@ -7,10 +7,7 @@ block content
             h1.text-capitalize.mb-0= record.name
     .row
         .border.rounded.py-3.px-4.bg-white.shadow-sm.row.m-0.col
-            each field in ['name', 'description']
-                    .mb-3.col-6
-                        p.form-label.fw-bold.text-capitalize= field
-                        p.mb-0.ps-2= record[field]
+            +text-fields-list(record, ['name', 'description'], 'groups')
             .col 
                 p.form-label.fw-bold.text-capitalize Members
                 if (!record.users.length)
