@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 const SECRET_KEY = process.env.JWT_SECRET; // Change this to a secure, environment-based key
-const TOKEN_EXPIRY = '1h'; // Set token expiration time
+const TOKEN_EXPIRY = '3h'; // Set token expiration time
 const SESSION_NAME = 'uam.sess';
 
 

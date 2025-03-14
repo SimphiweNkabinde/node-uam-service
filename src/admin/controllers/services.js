@@ -1,5 +1,6 @@
 import Knex from 'knex';
 import knexConfig from '../../../knexfile.js';
+import jwt from 'jsonwebtoken';
 const knex = Knex(knexConfig);
 
 async function findAll() {
@@ -32,9 +33,9 @@ async function findOne(filter) {
 }
 
 async function create(data) {
-    const api_key = data.name.replaceAll(' ', '-');
+    data.api_key = jwt.sign(data, 'secret');
     const record = await knex('services')
-        .insert({ ...data, api_key })
+        .insert(data)
         .returning('*');
     return record[0];
 }
