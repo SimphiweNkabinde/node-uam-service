@@ -10,9 +10,9 @@ import path from 'path';
 import override from 'koa-override';
 import serve from 'koa-static';
 
-// routes
-import authApiRoutes from './api/auth/routes.js';
-import adminRoutes from './admin/routes/index.js';
+// routers
+import adminRouter from './admin/routes/index.js';
+import apiRouter from './api/routes.js';
 import viewLocals from './admin/view.locals.js';
 const __dirname = path.resolve();
 
@@ -36,8 +36,9 @@ app.use(async(ctx, next) => {
 
 app.use(bodyParser());
 app.use(override());
-app.use(adminRoutes.routes());
-app.use(authApiRoutes.routes());
+//  routes
+app.use(adminRouter.routes());
+app.use(apiRouter.routes());
 
 app.listen(process.env.PORT, () => {
     console.log(`Server listening on port: ${process.env.PORT}`);

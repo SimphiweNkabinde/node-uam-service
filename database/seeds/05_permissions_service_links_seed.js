@@ -7,7 +7,7 @@ export const seed = async function(knex) {
     await knex('permissions_service_links').del();
     await knex('permissions_service_links').insert([
         { permission_id: 1, service_id: 1 },
-        { permission_id: 2, service_id: 2 },
-        { permission_id: 3, service_id: 2 },
+        { permission_id: 2, service_id: 1 },
+        { permission_id: 3, service_id: 1 },
     ]);
 };
