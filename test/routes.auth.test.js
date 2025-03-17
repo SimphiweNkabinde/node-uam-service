@@ -27,12 +27,6 @@ describe('routes: api/auth', () => {
 
     describe('POST /api/auth/local', () => {
         it('should return token & user data', (done) => {
-            // const username = 'testusername';
-            // const email = 'testuser@email.com';
-            // const password = 'Password@123';
-            // const salt = bcrypt.genSaltSync();
-            // const hashedPassword = bcrypt.hashSync(userData.password, salt);
-
             const userData = {
                 username: 'testusername',
                 email: 'testuser@email.com',
