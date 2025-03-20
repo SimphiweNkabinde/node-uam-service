@@ -1,6 +1,7 @@
 // set environment
 import * as dotenv from 'dotenv';
 dotenv.config({ path: `.env.${process.env.NODE_ENV || 'development'}` });
+import cors from '@koa/cors';
 
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
@@ -17,6 +18,8 @@ import viewLocals from './admin/view.locals.js';
 const __dirname = path.resolve();
 
 const app = new Koa();
+
+app.use(cors());
 
 // serve static files
 app.use(serve(path.join(__dirname, '/src/admin/public')));

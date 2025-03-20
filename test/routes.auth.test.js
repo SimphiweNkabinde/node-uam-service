@@ -216,4 +216,86 @@ describe('routes: api/auth', () => {
                 });
         });
     });
+
+    describe('GET /api/auth/user', () => {
+
+        it('should return an authenticated user\'s data', (done) => {
+
+            requester
+                .post('/api/auth/local')
+                .send({
+                    email: 'userone@email.com',
+                    password: 'Userone@1234password',
+                })
+                .end((err, res) => {
+                    should.not.exist(err);
+                    should.exist(res);
+                    res.should.have.status(200);
+                    res.body.data.should.have.all.keys('id', 'username', 'email', 'token');
+
+                    const authToken = res.body.data.token;
+                    const apiKey = 'service-1';
+                    requester
+                        .get('/api/auth/user')
+                        .set('Authorization', `Bearer ${authToken}`)
+                        .set('X-API-KEY', apiKey)
+                        .end((err, res) => {
+                            should.not.exist(err);
+                            res.should.have.status(200);
+                            res.type.should.be.equal('application/json');
+                            res.body.should.have.property('data');
+                            res.body.data.should.have.all.keys('id', 'username', 'email');
+                            done();
+                        });
+                });;
+        });
+        it('should return a 401 error if the header credentials are invalid', (done) => {
+
+            requester
+                .post('/api/auth/local')
+                .send({
+                    email: 'userone@email.com',
+                    password: 'Userone@1234password',
+                })
+                .end((err, res) => {
+                    should.not.exist(err);
+                    should.exist(res);
+                    res.should.have.status(200);
+                    res.body.data.should.have.all.keys('id', 'username', 'email', 'token');
+
+                    const authToken = res.body.data.token;
+                    const apiKey = 'service-1';
+                    requester
+                        .get('/api/auth/user')
+                        .set('Authorization', 'Bearer invalid-user-token')
+                        .set('X-API-KEY', apiKey)
+                        .end((err, res) => {
+                            should.not.exist(err);
+                            res.should.have.status(401);
+                            res.type.should.be.equal('application/json');
+                            res.body.should.have.property('error');
+                            res.body.error.should.be.an('object');
+                            res.body.error.should.have.all.keys('name', 'message', 'status', 'stack', 'details');
+                            res.body.error.should.have.status(401);
+                            res.body.error.name.should.equal('UnauthorizedError');
+
+                            requester
+                                .get('/api/auth/user')
+                                .set('Authorization', `Bearer ${authToken}`)
+                                .set('X-API-KEY', 'invalid-service-api-key')
+                                .end((err, res) => {
+                                    should.not.exist(err);
+                                    res.should.have.status(401);
+                                    res.type.should.be.equal('application/json');
+                                    res.body.should.have.property('error');
+                                    res.body.error.should.be.an('object');
+                                    res.body.error.should.have.all.keys('name', 'message', 'status', 'stack', 'details');
+                                    res.body.error.should.have.status(401);
+                                    res.body.error.name.should.equal('UnauthorizedError');
+                                    done();
+                                });
+                        });
+                });;
+        });
+    });
 });

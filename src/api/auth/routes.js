@@ -4,6 +4,7 @@ import { register as registerSchema, login as loginSchema } from './schemas.js';
 import { ApplicationError, ValidationError } from '../../utils/errors.js';
 import authController from './controller.js';
 import jwt from 'jsonwebtoken';
+import middleware from '../middleware.js';
 
 
 const basepath = '/api/auth';
@@ -77,6 +78,11 @@ router.post(`${basepath}/:provider`, async(ctx) => {
             return new ApplicationError();
         }
     }
+});
+
+router.get(`${basepath}/user`, middleware.auth, async(ctx) => {
+    const { id, username, email } =  ctx.state.user;
+    ctx.body = { data: { id, username, email } };
 });
 
 export default router;
